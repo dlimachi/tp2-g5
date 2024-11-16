@@ -1,72 +1,81 @@
 package ar.edu.itba.pod.grpc;
 
-import ar.edu.itba.pod.grpc.combiners.TicketCountCombinerFactory;
-import ar.edu.itba.pod.grpc.combiners.TicketCountReducerFactory;
-import ar.edu.itba.pod.grpc.collators.*;
-import ar.edu.itba.pod.grpc.mapper.*;
+import ar.edu.itba.pod.grpc.collators.TotalTicketsByInfractionAndAgencyCollator;
+import ar.edu.itba.pod.grpc.combiners.TotalTicketsByInfractionAndAgencyCombinerFactory;
+import ar.edu.itba.pod.grpc.combiners.TotalTicketsByInfractionAndAgencyReducerFactory;
+import ar.edu.itba.pod.grpc.dto.InfractionAndAgencyDto;
+import ar.edu.itba.pod.grpc.dto.InfractionDto;
+import ar.edu.itba.pod.grpc.dto.TicketByAgencyAndInfractionDto;
+import ar.edu.itba.pod.grpc.mapper.TotalTicketsByInfractionAndAgencyMapper;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.IMap;
-import com.hazelcast.mapreduce.JobCompletableFuture;
+import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
+import utils.Constants;
+import utils.csv.CsvMappingConfig;
 
-public class Query1 implements Runnable {
+@SuppressWarnings("deprecation")
+public class Query1 extends Query {
     private static final String OUT_CSV_HEADER = "Infraction;Agency;Tickets\n";
     private static final String QUERY_1_CSV_NAME = "query1.csv";
 
-    private final String jobName;
-    private final HazelcastInstance hazelcast;
-    private final IMap<String, Integer> ticketCountMap;
-    private final Map<String, String> infractions;
-    private final Map<String, String> agencies;
-    private final String outPath;
+    @Override
+    protected TriConsumer<String[], CsvMappingConfig, Integer> ticketsConsumer() {
+        IMap<Integer, InfractionAndAgencyDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_INFRACTION_AND_AGENCY_MAP.getName());
+        IMap<String, InfractionDto> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
+        IMap<String, String> agencies = hazelcastInstance.getMap(HazelcastCollections.AGENCIES_MAP.getName()); // Suponiendo que tienes este mapa para agencias
 
-    public Query1(String jobName, HazelcastInstance hazelcast,
-                  IMap<String, Integer> ticketCountMap, Map<String, String> infractions,
-                  Map<String, String> agencies, String outPath) {
-        this.jobName = jobName;
-        this.hazelcast = hazelcast;
-        this.ticketCountMap = ticketCountMap;
-        this.infractions = infractions;
-        this.agencies = agencies;
-        this.outPath = outPath;
+        return (fields, config, id) -> {
+            if (fields.length >= Constants.FIELD_COUNT) {
+                try {
+                    String infractionCode = fields[config.getColumnIndex("infractionCode")];
+                    String issuingAgency = fields[config.getColumnIndex("issuingAgency")];
+
+                    InfractionDto infractionDto = infractions.get(infractionCode);
+                    if (infractionDto == null) {
+                        logger.warn(String.format("Infraction code %s not found in infractions map. Skipping ticket.", infractionCode));
+                        return;
+                    }
+
+                    if (!agencies.containsKey(issuingAgency)) {
+                        logger.warn(String.format("Issuing agency %s not found in agencies map. Skipping ticket.", issuingAgency));
+                        return;
+                    }
+
+                    String infractionDefinition = infractionDto.getDefinition();
+                    tickets.putIfAbsent(id, new InfractionAndAgencyDto(infractionDefinition, issuingAgency));
+                } catch (Exception e) {
+                    logger.error("Error processing ticket data", e);
+                }
+            } else {
+                logger.error(String.format("Invalid line format, expected %d fields, found %d", Constants.FIELD_COUNT, fields.length));
+            }
+        };
     }
 
     @Override
-    public void run() {
-        JobTracker jobTracker = hazelcast.getJobTracker(jobName);
-        KeyValueSource<String, Integer> source = KeyValueSource.fromMap(ticketCountMap);
+    protected void executeJob() throws ExecutionException, InterruptedException {
+        IMap<Integer, InfractionAndAgencyDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_INFRACTION_AND_AGENCY_MAP.getName());
+        IMap<String, InfractionDto> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
 
-        JobCompletableFuture<List<Map.Entry<String, Integer>>> future = jobTracker.newJob(source)
-                .mapper(new InfractionAgencyMapper(infractions, agencies))
-                .combiner(new TicketCountCombinerFactory())
-                .reducer(new TicketCountReducerFactory())
-                .submit(new TicketCountCollator());
+        JobTracker jobTracker = hazelcastInstance.getJobTracker(Constants.QUERY_1_JOB_TRACKER_NAME);
+        KeyValueSource<Integer, InfractionAndAgencyDto> source = KeyValueSource.fromMap(tickets);
+        Job<Integer, InfractionAndAgencyDto> job = jobTracker.newJob(source);
 
-        List<Map.Entry<String, Integer>> result;
-        try {
-            result = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        final ICompletableFuture<TreeSet<TicketByAgencyAndInfractionDto>> future = job
+                .mapper(new TotalTicketsByInfractionAndAgencyMapper())
+                .combiner(new TotalTicketsByInfractionAndAgencyCombinerFactory())
+                .reducer(new TotalTicketsByInfractionAndAgencyReducerFactory())
+                .submit(new TotalTicketsByInfractionAndAgencyCollator());
 
-        writeResultToFile(result);
-    }
-
-    private void writeResultToFile(List<Map.Entry<String, Integer>> result) {
-        try (BufferedWriter buffWriter = new BufferedWriter(new FileWriter(outPath + QUERY_1_CSV_NAME))) {
-            buffWriter.write(OUT_CSV_HEADER);
-            for (Map.Entry<String, Integer> entry : result) {
-                buffWriter.write(entry.getKey() + ";" + entry.getValue() + "\n");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        TreeSet<TicketByAgencyAndInfractionDto> result = future.get();
+        writeData(OUT_CSV_HEADER, result);
+        tickets.clear();
+        infractions.clear();
     }
 }
