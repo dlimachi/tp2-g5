@@ -3,7 +3,8 @@ package ar.edu.itba.pod.grpc;
 public enum HazelcastCollections {
     INFRACTIONS_MAP("infractions"),
     TICKETS_BY_INFRACTION_AND_AGENCY_MAP("ticketsByInfraction"),
-    AGENCIES_MAP("agencyFine");
+    AGENCIES_MAP("agencyFine"),
+    TICKETS_BY_AGENCY_AND_DATE_MAP("ticketsByAgencyAndDate");
 
     private final String name;
 
