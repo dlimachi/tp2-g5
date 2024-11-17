@@ -10,5 +10,6 @@ public class Constants {
     public static final String FILE_READ_END_MESSAGE = " - Fin de lectura del archivo\n";
     public static final Integer FIELD_COUNT = 6;
     public static final String QUERY_1_JOB_TRACKER_NAME = "totalTicketsByInfraction";
+    public static final String QUERY_2_JOB_TRACKER_NAME = "totalAmountByAgencyAndDate";
     public static final String ARGUMENTS_DATE_FORMAT = "dd/MM/yyyy";
 }

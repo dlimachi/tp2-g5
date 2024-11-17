@@ -1,5 +1,7 @@
 package ar.edu.itba.pod.grpc.client;
 
+import ar.edu.itba.pod.grpc.Query;
+import ar.edu.itba.pod.grpc.Query1;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
