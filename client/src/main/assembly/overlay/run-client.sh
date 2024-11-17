@@ -1,9 +1,6 @@
 #!/bin/bash
 
 PATH_TO_CODE_BASE=`pwd`
+MAIN_JAR="client/target/tp2-g5-client-2024.2Q.jar"
+java -jar "$PATH_TO_CODE_BASE/$MAIN_JAR" "$@"
 
-#JAVA_OPTS="-Djava.rmi.server.codebase=file://$PATH_TO_CODE_BASE/lib/jars/rmi-params-client-1.0-SNAPSHOT.jar"
-
-MAIN_CLASS="ar.edu.itba.pod.grpc.client.Client"
-
-java $JAVA_OPTS -cp 'lib/jars/*'  $MAIN_CLASS $*

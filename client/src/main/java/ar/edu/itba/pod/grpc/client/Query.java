@@ -1,5 +1,8 @@
-package ar.edu.itba.pod.grpc;
+package ar.edu.itba.pod.grpc.client;
 
+import ar.edu.itba.pod.grpc.CsvWritable;
+import ar.edu.itba.pod.grpc.HazelcastCollections;
+import ar.edu.itba.pod.grpc.TriConsumer;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import java.io.FileWriter;

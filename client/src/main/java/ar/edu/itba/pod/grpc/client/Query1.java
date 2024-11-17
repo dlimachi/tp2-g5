@@ -1,5 +1,7 @@
-package ar.edu.itba.pod.grpc;
+package ar.edu.itba.pod.grpc.client;
 
+import ar.edu.itba.pod.grpc.HazelcastCollections;
+import ar.edu.itba.pod.grpc.TriConsumer;
 import ar.edu.itba.pod.grpc.collators.TotalTicketsByInfractionAndAgencyCollator;
 import ar.edu.itba.pod.grpc.combiners.TotalTicketsByInfractionAndAgencyCombinerFactory;
 import ar.edu.itba.pod.grpc.combiners.TotalTicketsByInfractionAndAgencyReducerFactory;
@@ -7,13 +9,12 @@ import ar.edu.itba.pod.grpc.dto.InfractionAndAgencyDto;
 import ar.edu.itba.pod.grpc.dto.InfractionDto;
 import ar.edu.itba.pod.grpc.dto.TicketByAgencyAndInfractionDto;
 import ar.edu.itba.pod.grpc.mapper.TotalTicketsByInfractionAndAgencyMapper;
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
-import java.util.Map;
+
 import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import utils.Constants;

@@ -1,4 +1,4 @@
-package ar.edu.itba.pod.grpc;
+package ar.edu.itba.pod.grpc.client;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
