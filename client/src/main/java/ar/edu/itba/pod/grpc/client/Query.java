@@ -3,6 +3,7 @@ package ar.edu.itba.pod.grpc.client;
 import ar.edu.itba.pod.grpc.CsvWritable;
 import ar.edu.itba.pod.grpc.HazelcastCollections;
 import ar.edu.itba.pod.grpc.TriConsumer;
+import ar.edu.itba.pod.grpc.dto.AgencyDto;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import java.io.FileWriter;
@@ -85,14 +86,16 @@ public abstract class Query {
     }
 
     protected void loadData() {
-        // Parse infractions CSV
         if (infractionsConsumer() != null) {
             CsvFileIterator.readCsv(arguments, CsvFileType.INFRACTIONS, infractionsConsumer());
         }
 
-        // Parse tickets CSV and count infractions
         if (ticketsConsumer() != null) {
             CsvFileIterator.readCsvParallel(arguments, CsvFileType.TICKETS, ticketsConsumer());
+        }
+
+        if (agenciesConsumer() != null) {
+            CsvFileIterator.readCsv(arguments, CsvFileType.AGENCIES, ticketsConsumer());
         }
     }
 
@@ -111,14 +114,13 @@ public abstract class Query {
     }
 
     protected TriConsumer<String[], CsvMappingConfig, Integer> agenciesConsumer() {
-        IMap<String, InfractionDto> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
+        IMap<String, AgencyDto> agencies = hazelcastInstance.getMap(HazelcastCollections.AGENCIES_MAP.getName());
         return (fields, config, id) -> {
-            if (fields.length == InfractionDto.FIELD_COUNT) {
-                String code = fields[config.getColumnIndex("code")];
-                String definition = fields[config.getColumnIndex("definition")];
-                infractions.put(code, new InfractionDto(code, definition));
+            if (fields.length == 1) {
+                String issuingAgency = fields[config.getColumnIndex("issuingAgency")];
+                agencies.put(issuingAgency, new AgencyDto(issuingAgency));
             } else {
-                logger.error(String.format("Invalid line format, expected %d fields, found %d", InfractionDto.FIELD_COUNT, fields.length));
+                logger.error(String.format("Invalid line format, expected %d fields, found %d", 1, fields.length));
             }
         };
     }

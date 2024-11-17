@@ -6,6 +6,7 @@ import com.hazelcast.nio.serialization.DataSerializable;
 import java.io.IOException;
 
 public class AgencyDto implements DataSerializable {
+  public static final Integer FIELD_COUNT = 1;
   private String issuingAgency;
 
   public AgencyDto() {

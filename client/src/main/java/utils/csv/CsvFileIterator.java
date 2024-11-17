@@ -104,6 +104,10 @@ public class CsvFileIterator implements Iterator<String[]>, Closeable {
                     config = CsvMappingConfigFactory.getInfractionConfig(arguments.getInPath(), arguments.getCity());
                     filename = arguments.getInPath() + "/infractions" + arguments.getCity() + ".csv";
                 }
+                case AGENCIES -> {
+                    config = CsvMappingConfigFactory.getAgencyConfig(arguments.getInPath(), arguments.getCity());
+                    filename = arguments.getInPath() + "/agencies" + arguments.getCity() + ".csv";
+                }
                 default -> throw new IllegalArgumentException("Unsupported CSV file type");
             }
         } catch (IOException e) {

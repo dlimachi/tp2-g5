@@ -29,23 +29,23 @@ public class Query1 extends Query {
     protected TriConsumer<String[], CsvMappingConfig, Integer> ticketsConsumer() {
         IMap<Integer, InfractionAndAgencyDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_INFRACTION_AND_AGENCY_MAP.getName());
         IMap<String, InfractionDto> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
-        IMap<String, String> agencies = hazelcastInstance.getMap(HazelcastCollections.AGENCIES_MAP.getName()); // Suponiendo que tienes este mapa para agencias
+        IMap<String, String> agencies = hazelcastInstance.getMap(HazelcastCollections.AGENCIES_MAP.getName());
 
         return (fields, config, id) -> {
             if (fields.length >= Constants.FIELD_COUNT) {
                 try {
-                    String infractionCode = fields[config.getColumnIndex("infractionCode")];
+                    String infractionCode = fields[config.getColumnIndex("infractionId")];
                     String issuingAgency = fields[config.getColumnIndex("issuingAgency")];
 
                     InfractionDto infractionDto = infractions.get(infractionCode);
                     if (infractionDto == null) {
                         logger.warn(String.format("Infraction code %s not found in infractions map. Skipping ticket.", infractionCode));
-                        return;
+                    //    return;
                     }
 
                     if (!agencies.containsKey(issuingAgency)) {
                         logger.warn(String.format("Issuing agency %s not found in agencies map. Skipping ticket.", issuingAgency));
-                        return;
+                    //    return;
                     }
 
                     String infractionDefinition = infractionDto.getDefinition();
@@ -54,7 +54,7 @@ public class Query1 extends Query {
                     logger.error("Error processing ticket data", e);
                 }
             } else {
-                logger.error(String.format("Invalid line format, expected %d fields, found %d", Constants.FIELD_COUNT, fields.length));
+                logger.error(String.format("Invalid line format, expected %d fields, found %d bla", Constants.FIELD_COUNT, fields.length));
             }
         };
     }

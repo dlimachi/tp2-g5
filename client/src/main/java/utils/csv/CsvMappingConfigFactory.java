@@ -13,4 +13,9 @@ public class CsvMappingConfigFactory {
         String filePath = inPath + "/infractions" + city.toUpperCase() + ".json";
         return CsvMappingConfig.fromJson(filePath);
     }
+
+    public static CsvMappingConfig getAgencyConfig(String inPath, String city) throws IOException {
+        String filePath = inPath + "/agencies" + city.toUpperCase() + ".json";
+        return CsvMappingConfig.fromJson(filePath);
+    }
 }
