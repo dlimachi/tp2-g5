@@ -91,11 +91,11 @@ public abstract class Query {
         }
 
         if (ticketsConsumer() != null) {
-            CsvFileIterator.readCsvParallel(arguments, CsvFileType.TICKETS, ticketsConsumer());
+            CsvFileIterator.readCsv(arguments, CsvFileType.TICKETS, ticketsConsumer());
         }
 
         if (agenciesConsumer() != null) {
-            CsvFileIterator.readCsv(arguments, CsvFileType.AGENCIES, ticketsConsumer());
+            CsvFileIterator.readCsv(arguments, CsvFileType.AGENCIES, agenciesConsumer());
         }
     }
 
