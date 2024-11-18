@@ -5,9 +5,9 @@ import ar.edu.itba.pod.grpc.TriConsumer;
 import ar.edu.itba.pod.grpc.collators.TotalTicketsByInfractionAndAgencyCollator;
 import ar.edu.itba.pod.grpc.combiners.TotalTicketsByInfractionAndAgencyCombinerFactory;
 import ar.edu.itba.pod.grpc.combiners.TotalTicketsByInfractionAndAgencyReducerFactory;
-import ar.edu.itba.pod.grpc.dto.AgencyDto;
+import ar.edu.itba.pod.grpc.domain.Agency;
+import ar.edu.itba.pod.grpc.domain.Infraction;
 import ar.edu.itba.pod.grpc.dto.InfractionAndAgencyDto;
-import ar.edu.itba.pod.grpc.dto.InfractionDto;
 import ar.edu.itba.pod.grpc.dto.TicketByAgencyAndInfractionDto;
 import ar.edu.itba.pod.grpc.mapper.TotalTicketsByInfractionAndAgencyMapper;
 import com.hazelcast.core.ICompletableFuture;
@@ -15,7 +15,6 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
-
 import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import utils.Constants;
@@ -29,8 +28,8 @@ public class Query1 extends Query {
     @Override
     protected TriConsumer<String[], CsvMappingConfig, Integer> ticketsConsumer() {
         IMap<Integer, InfractionAndAgencyDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_INFRACTION_AND_AGENCY_MAP.getName());
-        IMap<String, InfractionDto> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
-        IMap<String, AgencyDto> agencies = hazelcastInstance.getMap(HazelcastCollections.AGENCIES_MAP.getName());
+        IMap<String, Infraction> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
+        IMap<String, Agency> agencies = hazelcastInstance.getMap(HazelcastCollections.AGENCIES_MAP.getName());
 
         return (fields, config, id) -> {
             if (fields.length >= Constants.FIELD_COUNT) {
@@ -38,7 +37,7 @@ public class Query1 extends Query {
                     String infractionCode = fields[config.getColumnIndex("infractionId")];
                     String issuingAgency = fields[config.getColumnIndex("issuingAgency")];
 
-                    InfractionDto infractionDto = infractions.get(infractionCode);
+                    Infraction infractionDto = infractions.get(infractionCode);
                     if (infractionDto == null) {
                         logger.warn(String.format("Infraction code %s not found in infractions map. Skipping ticket.", infractionCode));
                         return;
@@ -63,7 +62,6 @@ public class Query1 extends Query {
     @Override
     protected void executeJob() throws ExecutionException, InterruptedException {
         IMap<Integer, InfractionAndAgencyDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_INFRACTION_AND_AGENCY_MAP.getName());
-        IMap<String, InfractionDto> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
 
         JobTracker jobTracker = hazelcastInstance.getJobTracker(Constants.QUERY_1_JOB_TRACKER_NAME);
         KeyValueSource<Integer, InfractionAndAgencyDto> source = KeyValueSource.fromMap(tickets);
@@ -78,6 +76,5 @@ public class Query1 extends Query {
         TreeSet<TicketByAgencyAndInfractionDto> result = future.get();
         writeData(OUT_CSV_HEADER, result);
         tickets.clear();
-        infractions.clear();
     }
 }

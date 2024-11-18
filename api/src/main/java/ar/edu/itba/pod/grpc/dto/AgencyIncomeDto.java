@@ -1,11 +1,8 @@
 package ar.edu.itba.pod.grpc.dto;
 
-import com.hazelcast.nio.ObjectDataInput;
-import com.hazelcast.nio.ObjectDataOutput;
-import com.hazelcast.nio.serialization.DataSerializable;
-import java.io.IOException;
+import ar.edu.itba.pod.grpc.CsvWritable;
 
-public class AgencyIncomeDto implements DataSerializable {
+public class AgencyIncomeDto implements CsvWritable, Comparable<AgencyIncomeDto>{
   private String agency;
   private int year;
   private int month;
@@ -38,18 +35,24 @@ public class AgencyIncomeDto implements DataSerializable {
   }
 
   @Override
-  public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
-    objectDataOutput.writeUTF(agency);
-    objectDataOutput.writeInt(year);
-    objectDataOutput.writeInt(month);
-    objectDataOutput.writeInt(ydt);
+  public String toCsv() {
+    return agency + ";" + year + ";" + month + ";" + ydt;
   }
 
   @Override
-  public void readData(ObjectDataInput objectDataInput) throws IOException {
-    agency = objectDataInput.readUTF();
-    year = objectDataInput.readInt();
-    month = objectDataInput.readInt();
-    ydt = objectDataInput.readInt();
+  public int compareTo(AgencyIncomeDto o) {
+    int agencyComparison = agency.compareTo(o.getAgency());
+    if (agencyComparison != 0) {
+      return agencyComparison;
+    }
+    int yearComparison = Integer.compare(o.getYear(), year);
+    if (yearComparison != 0) {
+      return yearComparison;
+    }
+    int monthComparison = Integer.compare(o.getMonth(), month);
+    if (monthComparison != 0) {
+      return monthComparison;
+    }
+    return Integer.compare(o.getYdt(), ydt);
   }
 }

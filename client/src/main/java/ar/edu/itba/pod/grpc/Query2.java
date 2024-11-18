@@ -69,12 +69,7 @@ public class Query2 extends Query {
         .submit(new YTDIncomeByAgencyCollator());
 
     List<AgencyIncomeDto> result = future.get();
-
-    /*result.forEach(agencyIncomeDto -> {
-      System.out.println(agencyIncomeDto.getAgency() + " - " + agencyIncomeDto.getYear() + "-" + agencyIncomeDto.getMonth() + " : " + agencyIncomeDto.getYdt());
-    });*/
-
-    //writeData(OUT_CSV_HEADER, result);
+    writeData(OUT_CSV_HEADER, result);
     tickets.clear();
     agencies.clear();
   }
