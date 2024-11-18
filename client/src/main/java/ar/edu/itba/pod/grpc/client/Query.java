@@ -3,6 +3,7 @@ package ar.edu.itba.pod.grpc.client;
 import ar.edu.itba.pod.grpc.CsvWritable;
 import ar.edu.itba.pod.grpc.HazelcastCollections;
 import ar.edu.itba.pod.grpc.TriConsumer;
+import ar.edu.itba.pod.grpc.domain.Infraction;
 import ar.edu.itba.pod.grpc.dto.AgencyDto;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -16,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.Arguments;
 import utils.Constants;
-import ar.edu.itba.pod.grpc.dto.InfractionDto;
 import utils.csv.CsvFileIterator;
 import utils.csv.CsvFileType;
 import utils.csv.CsvMappingConfig;
@@ -101,14 +101,14 @@ public abstract class Query {
 
     // Assuming infractions are always loaded in the same way
     protected TriConsumer<String[], CsvMappingConfig, Integer> infractionsConsumer() {
-        IMap<String, InfractionDto> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
+        IMap<String, Infraction> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
         return (fields, config, id) -> {
-            if (fields.length == InfractionDto.FIELD_COUNT) {
+            if (fields.length == Infraction.FIELD_COUNT) {
                 String code = fields[config.getColumnIndex("code")];
                 String definition = fields[config.getColumnIndex("definition")];
-                infractions.put(code, new InfractionDto(code, definition));
+                infractions.put(code, new Infraction(code, definition));
             } else {
-                logger.error(String.format("Invalid line format, expected %d fields, found %d", InfractionDto.FIELD_COUNT, fields.length));
+                logger.error(String.format("Invalid line format, expected %d fields, found %d", Infraction.FIELD_COUNT, fields.length));
             }
         };
     }

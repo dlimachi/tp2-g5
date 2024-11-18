@@ -1,49 +1,44 @@
 package ar.edu.itba.pod.grpc.dto;
 
-import com.hazelcast.nio.ObjectDataInput;
-import com.hazelcast.nio.ObjectDataOutput;
-import com.hazelcast.nio.serialization.DataSerializable;
-import java.io.IOException;
+import ar.edu.itba.pod.grpc.CsvWritable;
+import java.util.Objects;
 
-public class InfractionDto implements DataSerializable {
-    public static final Integer FIELD_COUNT = 2;
-    private String code;
-    private String definition;
+public class InfractionDto implements CsvWritable, Comparable<InfractionDto> {
+    private String infraction;
 
-    // No-arg constructor for deserialization
     public InfractionDto() {
     }
 
-    public InfractionDto(String code, String definition) {
-        this.code = code;
-        this.definition = definition;
-    }
-
-    @Override
-    public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
-        objectDataOutput.writeUTF(code);
-        objectDataOutput.writeUTF(definition);
-    }
-
-    @Override
-    public void readData(ObjectDataInput objectDataInput) throws IOException {
-        code = objectDataInput.readUTF();
-        definition = objectDataInput.readUTF();
+    public InfractionDto(String infraction) {
+        this.infraction = infraction;
     }
 
     @Override
     public String toString() {
         return "Infraction{" +
-                "code=" + code +
-                ", definition='" + definition + '\'' +
+                "infraction='" + infraction + '\'' +
                 '}';
     }
 
-    public String getCode() {
-        return code;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InfractionDto that = (InfractionDto) o;
+        return Objects.equals(infraction, that.infraction);
     }
 
-    public String getDefinition() {
-        return definition;
+    public String getInfraction() {
+        return infraction;
+    }
+
+    @Override
+    public String toCsv() {
+        return infraction;
+    }
+
+    @Override
+    public int compareTo(InfractionDto o) {
+        return infraction.compareTo(o.getInfraction());
     }
 }

@@ -60,7 +60,6 @@ public abstract class Query {
             throw new RuntimeException(e);
         }
 
-        // Log and write the end time of job execution
         long endJobTime = System.currentTimeMillis();
         String endJobLog = sdf.format(new Date(endJobTime)) + Constants.MAP_REDUCE_END_MESSAGE;
         logAndWrite(endJobLog, timestampLogFilePath);
