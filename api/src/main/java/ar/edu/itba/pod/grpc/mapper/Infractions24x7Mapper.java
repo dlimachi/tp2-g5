@@ -5,15 +5,16 @@ import com.hazelcast.mapreduce.Mapper;
 import com.hazelcast.mapreduce.Context;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @SuppressWarnings("deprecation")
 public class Infractions24x7Mapper implements Mapper<Integer, Infraction24x7RangeDto, String, String> {
 
-    private final LocalDate fromDate;
-    private final LocalDate toDate;
+    private final Date fromDate;
+    private final Date toDate;
 
-    public Infractions24x7Mapper(LocalDate fromDate, LocalDate toDate) {
+    public Infractions24x7Mapper(Date fromDate, Date toDate) {
         this.fromDate = fromDate;
         this.toDate = toDate;
     }
@@ -23,9 +24,9 @@ public class Infractions24x7Mapper implements Mapper<Integer, Infraction24x7Rang
         LocalDateTime dateTime = LocalDateTime.of(value.getYear(), value.getMonth(), value.getDay(), value.getHour(), 0);
         LocalDate date = dateTime.toLocalDate();
 
-        if (!date.isBefore(fromDate) && !date.isAfter(toDate)) {
+        /*if (!date.isBefore(fromDate) && !date.isAfter(toDate)) {
             String dayHour = String.format("%s-%02d", date, value.getHour());
             context.emit(value.getInfractionDefinition(), dayHour);
-        }
+        }*/
     }
 }
