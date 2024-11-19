@@ -39,6 +39,7 @@ public class Client {
       case 1 -> query = new Query1();
       case 2 -> query = new Query2();
       case 4 -> query = new Query4();
+      case 3 -> query = new Query3();
       case 5 -> query = new Query5();
 
       default -> {
