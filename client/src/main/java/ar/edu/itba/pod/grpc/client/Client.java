@@ -1,9 +1,6 @@
 package ar.edu.itba.pod.grpc.client;
 
-import ar.edu.itba.pod.grpc.Query;
-import ar.edu.itba.pod.grpc.Query1;
-import ar.edu.itba.pod.grpc.Query2;
-import ar.edu.itba.pod.grpc.Query5;
+import ar.edu.itba.pod.grpc.*;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
@@ -41,6 +38,7 @@ public class Client {
     switch (arguments.getQuery()) {
       case 1 -> query = new Query1();
       case 2 -> query = new Query2();
+      case 4 -> query = new Query4();
       case 5 -> query = new Query5();
 
       default -> {

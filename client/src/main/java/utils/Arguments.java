@@ -14,8 +14,8 @@ public class Arguments {
     private final Integer n;
     private final Date from;
     private final Date to;
+    private final String agency;
     private String separator;
-
 
     private Arguments(Builder builder) {
         this.query = builder.query;
@@ -26,6 +26,7 @@ public class Arguments {
         this.n = builder.n;
         this.from = builder.from;
         this.to = builder.to;
+        this.agency = builder.agency;
         this.separator = builder.separator;
 
         if (query == null || addresses == null || addresses.length == 0 || inPath == null || outPath == null) {
@@ -64,6 +65,11 @@ public class Arguments {
     public Date getTo() {
         return to;
     }
+
+    public String getAgency() {
+        return agency;
+    }
+
     public String getSeparator() {
         return separator;
     }
@@ -72,13 +78,14 @@ public class Arguments {
     public String toString() {
         return "Arguments{" +
                 "query=" + query +
-                "addresses=" + Arrays.toString(addresses) +
+                ", addresses=" + Arrays.toString(addresses) +
                 ", inPath='" + inPath + '\'' +
                 ", outPath='" + outPath + '\'' +
                 ", city='" + city + '\'' +
                 ", n=" + n +
                 ", from=" + from +
                 ", to=" + to +
+                ", agency='" + agency + '\'' +
                 '}';
     }
 
@@ -91,6 +98,7 @@ public class Arguments {
         private Integer n;
         private Date from;
         private Date to;
+        private String agency;
         private String separator = ";";
 
         public Builder query(Integer query) {
@@ -130,6 +138,11 @@ public class Arguments {
 
         public Builder to(Date to) {
             this.to = to;
+            return this;
+        }
+
+        public Builder agency(String agency) {
+            this.agency = agency;
             return this;
         }
 

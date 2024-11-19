@@ -4,7 +4,8 @@ public enum HazelcastCollections {
     INFRACTIONS_MAP("infractions"),
     TICKETS_BY_INFRACTION_AND_AGENCY_MAP("ticketsByInfraction"),
     AGENCIES_MAP("agencyFine"),
-    TICKETS_BY_AGENCY_AND_DATE_MAP("ticketsByAgencyAndDate");
+    TICKETS_BY_AGENCY_AND_DATE_MAP("ticketsByAgencyAndDate"),
+    TICKETS_BY_INFRACTION_AND_AMOUNT_MAP("ticketsByInfractionAndAmount");
 
     private final String name;
 

@@ -83,6 +83,10 @@ public abstract class Query {
     }
 
     protected void loadData() {
+        if (agenciesConsumer() != null) {
+            CsvFileIterator.readCsv(arguments, CsvFileType.AGENCIES, agenciesConsumer());
+        }
+
         if (infractionsConsumer() != null) {
             CsvFileIterator.readCsv(arguments, CsvFileType.INFRACTIONS, infractionsConsumer());
         }
@@ -91,9 +95,7 @@ public abstract class Query {
             CsvFileIterator.readCsv(arguments, CsvFileType.TICKETS, ticketsConsumer());
         }
 
-        if (agenciesConsumer() != null) {
-            CsvFileIterator.readCsv(arguments, CsvFileType.AGENCIES, agenciesConsumer());
-        }
+
     }
 
     // Assuming infractions are always loaded in the same way
