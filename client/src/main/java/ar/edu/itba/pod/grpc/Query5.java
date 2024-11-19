@@ -20,7 +20,6 @@ import java.util.concurrent.ExecutionException;
 import utils.Constants;
 import utils.csv.CsvMappingConfig;
 
-@SuppressWarnings("deprecation")
 public class Query5 extends Query{
 
   private static final String OUT_CSV_HEADER = "Infraction";
