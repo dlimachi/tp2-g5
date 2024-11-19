@@ -12,5 +12,6 @@ public class Constants {
     public static final String QUERY_1_JOB_TRACKER_NAME = "totalTicketsByInfraction";
     public static final String QUERY_2_JOB_TRACKER_NAME = "totalAmountByAgencyAndDate";
     public static final String QUERY_4_JOB_TRACKER_NAME = "infractionAmountRange";
+    public static final String QUERY_5_JOB_TRACKER_NAME = "infractions24x7";
     public static final String ARGUMENTS_DATE_FORMAT = "dd/MM/yyyy";
 }

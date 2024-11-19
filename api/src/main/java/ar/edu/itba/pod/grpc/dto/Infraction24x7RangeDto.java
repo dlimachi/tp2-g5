@@ -12,6 +12,9 @@ public class Infraction24x7RangeDto implements DataSerializable {
   private int day;
   private int hour;
 
+  public Infraction24x7RangeDto() {
+  }
+
   public Infraction24x7RangeDto(String infractionDefinition, int year, int month, int day, int hour) {
     this.infractionDefinition = infractionDefinition;
     this.year = year;
@@ -24,7 +27,6 @@ public class Infraction24x7RangeDto implements DataSerializable {
     return infractionDefinition;
   }
 
-
   public int getYear() {
     return year;
   }
@@ -33,9 +35,11 @@ public class Infraction24x7RangeDto implements DataSerializable {
     return month;
   }
 
+
   public int getDay() {
     return day;
   }
+
 
   public int getHour() {
     return hour;

@@ -27,14 +27,14 @@ public class Query5 extends Query{
 
   @Override
   protected TriConsumer<String[], CsvMappingConfig, Integer> ticketsConsumer() {
-    IMap<Integer, Infraction24x7RangeDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_INFRACTION_AND_AGENCY_MAP.getName());
+    IMap<Integer, Infraction24x7RangeDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_24_X_7_MAP.getName());
     IMap<String, Infraction> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
 
     return (fields, config, id) -> {
       if (fields.length >= Constants.FIELD_COUNT) {
         try {
-          String infractionCode = fields[config.getColumnIndex("violationCode")];
           String issueDate = fields[config.getColumnIndex("issueDate")];
+          String infractionCode = fields[config.getColumnIndex("infractionId")];
 
           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
           LocalDateTime localDateTime = LocalDateTime.parse(issueDate, formatter);
@@ -64,9 +64,9 @@ public class Query5 extends Query{
 
   @Override
   protected void executeJob() throws ExecutionException, InterruptedException {
-    IMap<Integer, Infraction24x7RangeDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_INFRACTION_AND_AGENCY_MAP.getName());
+    IMap<Integer, Infraction24x7RangeDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_24_X_7_MAP.getName());
 
-    JobTracker jobTracker = hazelcastInstance.getJobTracker("infractions24x7");
+    JobTracker jobTracker = hazelcastInstance.getJobTracker(Constants.QUERY_5_JOB_TRACKER_NAME);
     KeyValueSource<Integer, Infraction24x7RangeDto> source = KeyValueSource.fromMap(tickets);
     Job<Integer, Infraction24x7RangeDto> job = jobTracker.newJob(source);
 

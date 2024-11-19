@@ -50,9 +50,7 @@ public class AgencyIncomeDto implements CsvWritable, Comparable<AgencyIncomeDto>
       return yearComparison;
     }
     int monthComparison = Integer.compare(o.getMonth(), month);
-    if (monthComparison != 0) {
       return monthComparison;
-    }
-    return Integer.compare(o.getYtd(), ytd);
+
   }
 }
