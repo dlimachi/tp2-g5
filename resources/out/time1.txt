@@ -1,25 +1,8 @@
-17/11/2024 13:17:25:462 - Inicio de la lectura del archivo
-17/11/2024 13:17:25:794 - Fin de lectura del archivo
-17/11/2024 13:17:25:795 - Inicio del trabajo map/reduce
-17/11/2024 13:17:25:926 - Fin del trabajo map/reduce
-17/11/2024 13:18:05:633 - Inicio de la lectura del archivo
-17/11/2024 13:18:05:956 - Fin de lectura del archivo
-17/11/2024 13:18:05:959 - Inicio del trabajo map/reduce
-17/11/2024 13:18:06:084 - Fin del trabajo map/reduce
-17/11/2024 13:21:33:705 - Inicio de la lectura del archivo
-17/11/2024 13:25:26:351 - Inicio de la lectura del archivo
-17/11/2024 13:25:26:598 - Fin de lectura del archivo
-17/11/2024 13:25:26:599 - Inicio del trabajo map/reduce
-17/11/2024 13:25:27:159 - Fin del trabajo map/reduce
-17/11/2024 13:25:53:124 - Inicio de la lectura del archivo
-17/11/2024 13:25:53:378 - Fin de lectura del archivo
-17/11/2024 13:25:53:380 - Inicio del trabajo map/reduce
-17/11/2024 13:25:53:463 - Fin del trabajo map/reduce
-17/11/2024 13:52:25:669 - Inicio de la lectura del archivo
-17/11/2024 13:52:25:936 - Fin de lectura del archivo
-17/11/2024 13:52:25:937 - Inicio del trabajo map/reduce
-17/11/2024 13:52:26:005 - Fin del trabajo map/reduce
-17/11/2024 18:17:51:500 - Inicio de la lectura del archivo
-17/11/2024 18:17:51:779 - Fin de lectura del archivo
-17/11/2024 18:17:51:782 - Inicio del trabajo map/reduce
-17/11/2024 18:17:51:925 - Fin del trabajo map/reduce
+18/11/2024 21:18:58:792 - Inicio de la lectura del archivo
+18/11/2024 21:18:59:263 - Fin de lectura del archivo
+18/11/2024 21:18:59:267 - Inicio del trabajo map/reduce
+18/11/2024 21:18:59:391 - Fin del trabajo map/reduce
+18/11/2024 21:19:14:624 - Inicio de la lectura del archivo
+18/11/2024 21:19:15:139 - Fin de lectura del archivo
+18/11/2024 21:19:15:142 - Inicio del trabajo map/reduce
+18/11/2024 21:19:15:421 - Fin del trabajo map/reduce
