@@ -6,16 +6,16 @@ public class AgencyIncomeDto implements CsvWritable, Comparable<AgencyIncomeDto>
   private String agency;
   private int year;
   private int month;
-  private int ydt;
+  private int ytd;
 
   public AgencyIncomeDto() {
   }
 
-  public AgencyIncomeDto(String agency, int year, int month, int ydt) {
+  public AgencyIncomeDto(String agency, int year, int month, int ytd) {
     this.agency = agency;
     this.year = year;
     this.month = month;
-    this.ydt = ydt;
+    this.ytd = ytd;
   }
 
   public String getAgency() {
@@ -30,13 +30,13 @@ public class AgencyIncomeDto implements CsvWritable, Comparable<AgencyIncomeDto>
     return month;
   }
 
-  public int getYdt() {
-    return ydt;
+  public int getYtd() {
+    return ytd;
   }
 
   @Override
   public String toCsv() {
-    return agency + ";" + year + ";" + month + ";" + ydt;
+    return agency + ";" + year + ";" + month + ";" + ytd;
   }
 
   @Override
@@ -53,6 +53,6 @@ public class AgencyIncomeDto implements CsvWritable, Comparable<AgencyIncomeDto>
     if (monthComparison != 0) {
       return monthComparison;
     }
-    return Integer.compare(o.getYdt(), ydt);
+    return Integer.compare(o.getYtd(), ytd);
   }
 }

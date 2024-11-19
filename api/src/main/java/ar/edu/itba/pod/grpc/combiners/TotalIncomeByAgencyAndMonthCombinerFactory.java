@@ -16,6 +16,10 @@ public class TotalIncomeByAgencyAndMonthCombinerFactory implements CombinerFacto
             public void combine(BigDecimal value) {
                 sum = sum.add(value);
             }
+            //agencia1-2004-10 -> 300
+            //agencia1-2005-12 -> 100
+            //agencia1-2004-11 -> 200
+            //agencia2-2004-12 -> 100
 
             @Override
             public BigDecimal finalizeChunk() {

@@ -33,7 +33,7 @@ public class Query2 extends Query {
         try {
           String issuingAgency = fields[config.getColumnIndex("issuingAgency")];
           String date = fields[config.getColumnIndex("issueDate")];
-          double amount = Double.parseDouble(fields[config.getColumnIndex("amount")]);
+          double amount = Double.parseDouble(fields[config.getColumnIndex("fineAmount")]);
           String[] dateParts = date.split("-");
           int year = Integer.parseInt(dateParts[0]);
           int month = Integer.parseInt(dateParts[1]);
