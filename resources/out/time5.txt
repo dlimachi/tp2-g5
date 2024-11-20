@@ -1,0 +1,44 @@
+19/11/2024 23:30:20:254 - Inicio de la lectura del archivo
+19/11/2024 23:30:20:743 - Fin de lectura del archivo
+19/11/2024 23:30:20:744 - Inicio del trabajo map/reduce
+19/11/2024 23:30:20:938 - Fin del trabajo map/reduce
+19/11/2024 23:33:12:914 - Inicio de la lectura del archivo
+19/11/2024 23:33:13:241 - Fin de lectura del archivo
+19/11/2024 23:33:13:242 - Inicio del trabajo map/reduce
+19/11/2024 23:33:13:312 - Fin del trabajo map/reduce
+19/11/2024 23:34:03:663 - Inicio de la lectura del archivo
+19/11/2024 23:34:03:924 - Fin de lectura del archivo
+19/11/2024 23:34:03:925 - Inicio del trabajo map/reduce
+19/11/2024 23:34:03:986 - Fin del trabajo map/reduce
+19/11/2024 23:35:33:580 - Inicio de la lectura del archivo
+19/11/2024 23:35:33:831 - Fin de lectura del archivo
+19/11/2024 23:35:33:832 - Inicio del trabajo map/reduce
+19/11/2024 23:35:33:879 - Fin del trabajo map/reduce
+19/11/2024 23:36:04:306 - Inicio de la lectura del archivo
+19/11/2024 23:36:04:511 - Fin de lectura del archivo
+19/11/2024 23:36:04:513 - Inicio del trabajo map/reduce
+19/11/2024 23:36:04:564 - Fin del trabajo map/reduce
+19/11/2024 23:43:03:203 - Inicio de la lectura del archivo
+19/11/2024 23:43:03:604 - Fin de lectura del archivo
+19/11/2024 23:43:03:605 - Inicio del trabajo map/reduce
+19/11/2024 23:43:03:683 - Fin del trabajo map/reduce
+19/11/2024 23:44:07:339 - Inicio de la lectura del archivo
+19/11/2024 23:44:07:647 - Fin de lectura del archivo
+19/11/2024 23:44:07:648 - Inicio del trabajo map/reduce
+19/11/2024 23:44:07:756 - Fin del trabajo map/reduce
+19/11/2024 23:44:26:868 - Inicio de la lectura del archivo
+19/11/2024 23:44:27:178 - Fin de lectura del archivo
+19/11/2024 23:44:27:179 - Inicio del trabajo map/reduce
+19/11/2024 23:44:27:254 - Fin del trabajo map/reduce
+19/11/2024 23:48:44:873 - Inicio de la lectura del archivo
+19/11/2024 23:48:45:440 - Fin de lectura del archivo
+19/11/2024 23:48:45:441 - Inicio del trabajo map/reduce
+19/11/2024 23:48:45:688 - Fin del trabajo map/reduce
+19/11/2024 23:56:56:721 - Inicio de la lectura del archivo
+19/11/2024 23:56:57:319 - Fin de lectura del archivo
+19/11/2024 23:56:57:319 - Inicio del trabajo map/reduce
+19/11/2024 23:56:57:568 - Fin del trabajo map/reduce
+20/11/2024 00:01:05:282 - Inicio de la lectura del archivo
+20/11/2024 00:01:05:891 - Fin de lectura del archivo
+20/11/2024 00:01:05:893 - Inicio del trabajo map/reduce
+20/11/2024 00:01:06:152 - Fin del trabajo map/reduce

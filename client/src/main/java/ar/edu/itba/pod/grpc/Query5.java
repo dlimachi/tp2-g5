@@ -14,6 +14,7 @@ import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -35,28 +36,32 @@ public class Query5 extends Query{
           String issueDate = fields[config.getColumnIndex("issueDate")];
           String infractionCode = fields[config.getColumnIndex("infractionId")];
 
+          if (issueDate == null || issueDate.trim().isEmpty()) {
+            logger.warn("Invalid date format, skipping ticket");
+            return;
+          }
+
           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
           LocalDateTime localDateTime = LocalDateTime.parse(issueDate, formatter);
 
-          int year = localDateTime.getYear();
-          int month = localDateTime.getMonthValue();
-          int day = localDateTime.getDayOfMonth();
-          int hour = localDateTime.getHour();
-
           Infraction infraction = infractions.get(infractionCode);
           if (infraction == null) {
-            logger.warn(String.format("Infraction code %s not found in infractions map. Skipping ticket.", infractionCode));
+            logger.warn("Infraction code {} not found, skipping ticket.", infractionCode);
             return;
           }
-          String infractionDefinition = infraction.getDefinition();
 
-
-          tickets.putIfAbsent(id, new Infraction24x7RangeDto(infractionDefinition, year, month, day, hour));
+          tickets.putIfAbsent(id, new Infraction24x7RangeDto(
+                  infraction.getDefinition(),
+                  localDateTime.getYear(),
+                  localDateTime.getMonthValue(),
+                  localDateTime.getDayOfMonth(),
+                  localDateTime.getHour()
+          ));
+        } catch (DateTimeParseException e) {
+          logger.error("Error parsing date: {}", e.getMessage());
         } catch (Exception e) {
-          logger.error("Error processing ticket data", e);
+          logger.error("Error processing ticket data: {}", e.getMessage());
         }
-      } else {
-        logger.error(String.format("Invalid line format, expected %d fields, found %d bla", Constants.FIELD_COUNT, fields.length));
       }
     };
   }
