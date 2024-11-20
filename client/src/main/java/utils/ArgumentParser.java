@@ -4,12 +4,13 @@ import exceptions.ClientIllegalArgumentException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class ArgumentParser {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.ARGUMENTS_DATE_FORMAT);
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(Constants.ARGUMENTS_DATE_FORMAT);
 
     private static final Map<String, BiConsumer<String, Arguments.Builder>> OPTIONS = Map.ofEntries(
             Map.entry("-Dquery", (argValue, argBuilder) -> argBuilder.query(Integer.parseInt(argValue))),
@@ -19,20 +20,12 @@ public class ArgumentParser {
             Map.entry("-Dcity", (argValue, argBuilder) -> argBuilder.city(argValue)),
             Map.entry("-Dn", (argValue, argBuilder) -> argBuilder.n(Integer.parseInt(argValue))),
             Map.entry("-Dfrom", (argValue, argBuilder) -> {
-                try {
-                    Date fromDate = dateFormat.parse(argValue);
-                    argBuilder.from(fromDate);
-                } catch (ParseException e) {
-                    System.out.println("Error parsing date for -Dfrom argument: " + e.getMessage());
-                }
+                LocalDate fromDate = LocalDate.parse(argValue, dateFormatter);
+                argBuilder.from(fromDate);
             }),
             Map.entry("-Dto", (argValue, argBuilder) -> {
-                try {
-                    Date toDate = dateFormat.parse(argValue);
-                    argBuilder.to(toDate);
-                } catch (ParseException e) {
-                    System.out.println("Error parsing date for -Dto argument: " + e.getMessage());
-                }
+                LocalDate toDate = LocalDate.parse(argValue, dateFormatter);
+                argBuilder.to(toDate);
             }),
             Map.entry("-Dseparator", (argValue, argBuilder) -> argBuilder.separator(argValue))
     );

@@ -15,9 +15,9 @@ public class Infractions24x7Mapper implements Mapper<Integer, Infraction24x7Rang
     private final LocalDate fromDate;
     private final LocalDate toDate;
 
-    public Infractions24x7Mapper(Date fromDate, Date toDate) {
-        this.fromDate = convertToLocalDate(fromDate);
-        this.toDate = convertToLocalDate(toDate);
+    public Infractions24x7Mapper(LocalDate fromDate, LocalDate toDate) {
+        this.fromDate = fromDate;
+        this.toDate = toDate;
     }
 
     private static LocalDate convertToLocalDate(Date date) {

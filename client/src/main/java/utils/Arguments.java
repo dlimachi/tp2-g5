@@ -3,7 +3,6 @@ package utils;
 import exceptions.ClientIllegalArgumentException;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 
 public class Arguments {
     private final Integer query;
@@ -12,8 +11,8 @@ public class Arguments {
     private final String outPath;
     private final String city;
     private final Integer n;
-    private final Date from;
-    private final Date to;
+    private final LocalDate from;
+    private final LocalDate to;
     private String separator;
 
 
@@ -57,13 +56,14 @@ public class Arguments {
         return n;
     }
 
-    public Date getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
-    public Date getTo() {
+    public LocalDate getTo() {
         return to;
     }
+
     public String getSeparator() {
         return separator;
     }
@@ -89,8 +89,8 @@ public class Arguments {
         private String outPath;
         private String city;
         private Integer n;
-        private Date from;
-        private Date to;
+        private LocalDate from;
+        private LocalDate to;
         private String separator = ";";
 
         public Builder query(Integer query) {
@@ -123,12 +123,12 @@ public class Arguments {
             return this;
         }
 
-        public Builder from(Date from) {
+        public Builder from(LocalDate from) {
             this.from = from;
             return this;
         }
 
-        public Builder to(Date to) {
+        public Builder to(LocalDate to) {
             this.to = to;
             return this;
         }

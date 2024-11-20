@@ -12,8 +12,12 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -31,7 +35,10 @@ public class Query5 extends Query{
     IMap<String, Infraction> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
 
     logger.info("fechas: {} {}", arguments.getFrom(), arguments.getTo());
+
     return (fields, config, id) -> {
+      logger.info(fields[config.getColumnIndex("infractionId")]);
+
       if (fields.length >= Constants.FIELD_COUNT) {
         try {
           String issueDate = fields[config.getColumnIndex("issueDate")];
@@ -58,7 +65,7 @@ public class Query5 extends Query{
           logger.error("Error processing ticket data", e);
         }
       } else {
-        logger.error(String.format("Invalid line format, expected %d fields, found %d bla", Constants.FIELD_COUNT, fields.length));
+        logger.error(String.format("Invalid line format, expected %d fields, found %d", Constants.FIELD_COUNT, fields.length));
       }
     };
   }
@@ -81,4 +88,9 @@ public class Query5 extends Query{
     writeData(OUT_CSV_HEADER, result);
     tickets.clear();
   }
+
+  private static LocalDate convertToLocalDate(Date date) {
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+  }
+
 }
