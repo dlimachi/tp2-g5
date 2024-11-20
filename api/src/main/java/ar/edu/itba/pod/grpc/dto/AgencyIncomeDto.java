@@ -2,7 +2,7 @@ package ar.edu.itba.pod.grpc.dto;
 
 import ar.edu.itba.pod.grpc.CsvWritable;
 
-public class AgencyIncomeDto implements CsvWritable, Comparable<AgencyIncomeDto>{
+public class AgencyIncomeDto implements CsvWritable, Comparable<AgencyIncomeDto> {
   private String agency;
   private int year;
   private int month;
@@ -16,6 +16,30 @@ public class AgencyIncomeDto implements CsvWritable, Comparable<AgencyIncomeDto>
     this.year = year;
     this.month = month;
     this.ytd = ytd;
+  }
+
+  @Override
+  public String toCsv() {
+    // Aquí está el problema, debemos asegurarnos de que agency no tenga el year-month
+    String cleanAgency = agency.split("-")[0];  // Extraer solo el nombre de la agencia
+    return String.format("%s;%d;%d;%d", cleanAgency, year, month, ytd);
+  }
+
+  @Override
+  public int compareTo(AgencyIncomeDto o) {
+    // Asegurarnos de comparar solo el nombre de la agencia
+    String thisAgency = this.agency.split("-")[0];
+    String otherAgency = o.agency.split("-")[0];
+
+    int agencyComparison = thisAgency.compareTo(otherAgency);
+    if (agencyComparison != 0) {
+      return agencyComparison;
+    }
+    int yearComparison = Integer.compare(year, o.year);
+    if (yearComparison != 0) {
+      return yearComparison;
+    }
+    return Integer.compare(month, o.month);
   }
 
   public String getAgency() {
@@ -34,23 +58,5 @@ public class AgencyIncomeDto implements CsvWritable, Comparable<AgencyIncomeDto>
     return ytd;
   }
 
-  @Override
-  public String toCsv() {
-    return agency + ";" + year + ";" + month + ";" + ytd;
-  }
 
-  @Override
-  public int compareTo(AgencyIncomeDto o) {
-    int agencyComparison = agency.compareTo(o.getAgency());
-    if (agencyComparison != 0) {
-      return agencyComparison;
-    }
-    int yearComparison = Integer.compare(o.getYear(), year);
-    if (yearComparison != 0) {
-      return yearComparison;
-    }
-    int monthComparison = Integer.compare(o.getMonth(), month);
-      return monthComparison;
-
-  }
 }

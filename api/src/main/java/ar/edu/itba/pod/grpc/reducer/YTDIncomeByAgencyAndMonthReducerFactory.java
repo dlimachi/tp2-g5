@@ -12,7 +12,6 @@ import java.util.TreeMap;
 
 @SuppressWarnings("deprecation")
 public class YTDIncomeByAgencyAndMonthReducerFactory implements ReducerFactory<String, BigDecimal, Map<String, BigDecimal>> {
-
     @Override
     public Reducer<BigDecimal, Map<String, BigDecimal>> newReducer(String key) {
         return new YTDIncomeByAgencyAndMonthReducer(key);
@@ -20,11 +19,7 @@ public class YTDIncomeByAgencyAndMonthReducerFactory implements ReducerFactory<S
 
     private static class YTDIncomeByAgencyAndMonthReducer extends Reducer<BigDecimal, Map<String, BigDecimal>> {
         private final String key;
-
-        protected static final Logger logger = LoggerFactory.getLogger(YTDIncomeByAgencyAndMonthReducerFactory.class);
-
-        private Map<String, BigDecimal> monthlyTotals;
-        private BigDecimal cumulativeSum;
+        private Map<Integer, Map<Integer, BigDecimal>> yearMonthTotals; // year -> (month -> amount)
 
         public YTDIncomeByAgencyAndMonthReducer(String key) {
             this.key = key;
@@ -32,34 +27,38 @@ public class YTDIncomeByAgencyAndMonthReducerFactory implements ReducerFactory<S
 
         @Override
         public void beginReduce() {
-            monthlyTotals = new TreeMap<>();  // Orden cronológico
-            cumulativeSum = BigDecimal.ZERO;
+            yearMonthTotals = new TreeMap<>();
         }
 
         @Override
         public void reduce(BigDecimal value) {
-            String currentMonthKey = extractYearMonthFromKey(key);
-            logger.info("la key es : " + key + "y current : " + currentMonthKey);
-            monthlyTotals.merge(currentMonthKey, value, BigDecimal::add);
+            String[] parts = key.split("-");
+            int year = Integer.parseInt(parts[1]);
+            int month = Integer.parseInt(parts[2]);
+
+            yearMonthTotals
+                    .computeIfAbsent(year, k -> new TreeMap<>())
+                    .merge(month, value, BigDecimal::add);
         }
 
         @Override
         public Map<String, BigDecimal> finalizeReduce() {
             Map<String, BigDecimal> ytdResults = new TreeMap<>();
+            String agency = key.split("-")[0];
 
-            for (Map.Entry<String, BigDecimal> entry : monthlyTotals.entrySet()) {
-                cumulativeSum = cumulativeSum.add(entry.getValue());
-                logger.info("cumulative sum es " + cumulativeSum);
-                ytdResults.put(entry.getKey(), cumulativeSum);
-                logger.info("se guardo {}", ytdResults.get(entry.getKey()));
+            for (Map.Entry<Integer, Map<Integer, BigDecimal>> yearEntry : yearMonthTotals.entrySet()) {
+                int year = yearEntry.getKey();
+                BigDecimal yearTotal = BigDecimal.ZERO;
+
+                for (Map.Entry<Integer, BigDecimal> monthEntry : yearEntry.getValue().entrySet()) {
+                    int month = monthEntry.getKey();
+                    yearTotal = yearTotal.add(monthEntry.getValue());
+                    String resultKey = String.format("%s-%d-%d", agency, year, month);
+                    ytdResults.put(resultKey, yearTotal);
+                }
             }
 
             return ytdResults;
-        }
-
-        private String extractYearMonthFromKey(String fullKey) {
-            String[] parts = fullKey.split("-");
-            return parts[1] + "-" + parts[2];  // "YYYY-MM"
         }
     }
 }
