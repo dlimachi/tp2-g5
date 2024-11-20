@@ -30,6 +30,7 @@ public class Query5 extends Query{
     IMap<Integer, Infraction24x7RangeDto> tickets = hazelcastInstance.getMap(HazelcastCollections.TICKETS_BY_24_X_7_MAP.getName());
     IMap<String, Infraction> infractions = hazelcastInstance.getMap(HazelcastCollections.INFRACTIONS_MAP.getName());
 
+    logger.info("fechas: {} {}", arguments.getFrom(), arguments.getTo());
     return (fields, config, id) -> {
       if (fields.length >= Constants.FIELD_COUNT) {
         try {
