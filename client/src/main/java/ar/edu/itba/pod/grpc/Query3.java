@@ -14,6 +14,7 @@ import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
@@ -43,12 +44,16 @@ public class Query3 extends Query {
                         return;
                     }
 
+                    // Convertir LocalDate a Date
+                    Date fromDate = Date.from(arguments.getFrom().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    Date toDate = Date.from(arguments.getFrom().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
                     // Convertir la fecha según el formato
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date ticketDate = dateFormat.parse(date);
 
                     // Verificar si la fecha está en el rango [from, to]
-                    if (ticketDate.before(arguments.getFrom()) || ticketDate.after(arguments.getTo())) {
+                    if (ticketDate.before( fromDate) || ticketDate.after( toDate)) {
                         return;
                     }
 

@@ -1,0 +1,4 @@
+20/11/2024 23:55:32:068 - Inicio de la lectura del archivo
+20/11/2024 23:55:32:898 - Fin de lectura del archivo
+20/11/2024 23:55:32:899 - Inicio del trabajo map/reduce
+20/11/2024 23:55:33:126 - Fin del trabajo map/reduce
