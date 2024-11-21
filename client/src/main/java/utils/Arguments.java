@@ -13,6 +13,7 @@ public class Arguments {
     private final Integer n;
     private final LocalDate from;
     private final LocalDate to;
+    private final String agency;
     private String separator;
 
     private Arguments(Builder builder) {
@@ -97,6 +98,8 @@ public class Arguments {
         private Integer n;
         private LocalDate from;
         private LocalDate to;
+
+        private String agency;
         private String separator = ";";
 
         public Builder query(Integer query) {
