@@ -2,49 +2,54 @@ package ar.edu.itba.pod.grpc.collators;
 
 import ar.edu.itba.pod.grpc.dto.AgencyIncomeDto;
 import com.hazelcast.mapreduce.Collator;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.*;
 
-@SuppressWarnings("deprecation")
 public class YTDIncomeByAgencyCollator implements Collator<Map.Entry<String, Map<String, BigDecimal>>, List<AgencyIncomeDto>> {
-
     @Override
     public List<AgencyIncomeDto> collate(Iterable<Map.Entry<String, Map<String, BigDecimal>>> values) {
-        List<AgencyIncomeDto> result = new ArrayList<>();
+        Map<String, Map<Integer, TreeMap<Integer, BigDecimal>>> agencyYearMonthMap = new TreeMap<>();
 
+        // Recolectar datos
         for (Map.Entry<String, Map<String, BigDecimal>> entry : values) {
-            String agency = entry.getKey().split("-")[0];
+            String fullKey = entry.getKey();
+            String agency = fullKey.split("-")[0];  // Extraer solo el nombre de la agencia
             Map<String, BigDecimal> monthlyData = entry.getValue();
 
-            BigDecimal cumulativeSum = BigDecimal.ZERO;
+            for (Map.Entry<String, BigDecimal> monthEntry : monthlyData.entrySet()) {
+                String[] parts = monthEntry.getKey().split("-");
+                int year = Integer.parseInt(parts[1]);
+                int month = Integer.parseInt(parts[2]);
+                BigDecimal amount = monthEntry.getValue();
 
-            List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<>(monthlyData.entrySet());
-            sortedEntries.sort(Comparator.comparing(e -> e.getKey()));
-
-            for (Map.Entry<String, BigDecimal> monthEntry : sortedEntries) {
-                String yearMonth = monthEntry.getKey();
-                BigDecimal monthlyIncome = monthEntry.getValue();
-
-                cumulativeSum = cumulativeSum.add(monthlyIncome);
-
-                String[] ymParts = yearMonth.split("-");
-                int year = Integer.parseInt(ymParts[0]);
-                int month = Integer.parseInt(ymParts[1]);
-
-                result.add(new AgencyIncomeDto(agency, year, month, cumulativeSum.intValue()));
+                agencyYearMonthMap
+                        .computeIfAbsent(agency, k -> new TreeMap<>())
+                        .computeIfAbsent(year, k -> new TreeMap<>())
+                        .put(month, amount);
             }
         }
 
-        return result.stream()
-                .sorted(Comparator.comparing(AgencyIncomeDto::getAgency)
-                        .thenComparing(AgencyIncomeDto::getYear)
-                        .thenComparing(AgencyIncomeDto::getMonth))
-                .collect(Collectors.toList());
+        List<AgencyIncomeDto> result = new ArrayList<>();
+
+        // Procesar agencia por agencia
+        for (Map.Entry<String, Map<Integer, TreeMap<Integer, BigDecimal>>> agencyEntry : agencyYearMonthMap.entrySet()) {
+            String agency = agencyEntry.getKey(); // Ya está limpia porque la limpiamos arriba
+
+            // Procesar año por año
+            for (Map.Entry<Integer, TreeMap<Integer, BigDecimal>> yearEntry : agencyEntry.getValue().entrySet()) {
+                int year = yearEntry.getKey();
+                BigDecimal yearTotal = BigDecimal.ZERO;
+
+                // Procesar mes por mes, acumulando el YTD
+                for (Map.Entry<Integer, BigDecimal> monthEntry : yearEntry.getValue().entrySet()) {
+                    int month = monthEntry.getKey();
+                    yearTotal = yearTotal.add(monthEntry.getValue());
+                    result.add(new AgencyIncomeDto(agency, year, month, yearTotal.intValue()));
+                }
+            }
+        }
+
+        Collections.sort(result);
+        return result;
     }
 }

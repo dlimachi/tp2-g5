@@ -15,7 +15,6 @@ public class Arguments {
     private final LocalDate to;
     private String separator;
 
-
     private Arguments(Builder builder) {
         this.query = builder.query;
         this.addresses = builder.addresses;
@@ -25,6 +24,7 @@ public class Arguments {
         this.n = builder.n;
         this.from = builder.from;
         this.to = builder.to;
+        this.agency = builder.agency;
         this.separator = builder.separator;
 
         if (query == null || addresses == null || addresses.length == 0 || inPath == null || outPath == null) {
@@ -64,6 +64,11 @@ public class Arguments {
         return to;
     }
 
+
+    public String getAgency() {
+        return agency;
+    }
+
     public String getSeparator() {
         return separator;
     }
@@ -72,13 +77,14 @@ public class Arguments {
     public String toString() {
         return "Arguments{" +
                 "query=" + query +
-                "addresses=" + Arrays.toString(addresses) +
+                ", addresses=" + Arrays.toString(addresses) +
                 ", inPath='" + inPath + '\'' +
                 ", outPath='" + outPath + '\'' +
                 ", city='" + city + '\'' +
                 ", n=" + n +
                 ", from=" + from +
                 ", to=" + to +
+                ", agency='" + agency + '\'' +
                 '}';
     }
 
@@ -130,6 +136,11 @@ public class Arguments {
 
         public Builder to(LocalDate to) {
             this.to = to;
+            return this;
+        }
+
+        public Builder agency(String agency) {
+            this.agency = agency;
             return this;
         }
 

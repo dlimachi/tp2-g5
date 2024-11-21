@@ -19,6 +19,7 @@ public class ArgumentParser {
             Map.entry("-DoutPath", (argValue, argBuilder) -> argBuilder.outPath(argValue)),
             Map.entry("-Dcity", (argValue, argBuilder) -> argBuilder.city(argValue)),
             Map.entry("-Dn", (argValue, argBuilder) -> argBuilder.n(Integer.parseInt(argValue))),
+            Map.entry("-Dagency", (argValue, argBuilder) -> argBuilder.agency(argValue)),
             Map.entry("-Dfrom", (argValue, argBuilder) -> {
                 LocalDate fromDate = LocalDate.parse(argValue, dateFormatter);
                 argBuilder.from(fromDate);

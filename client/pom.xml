@@ -15,11 +15,11 @@
       <artifactId>tp2-g5-api</artifactId>
       <version>2024.2Q</version>
     </dependency>
-      <dependency>
-          <groupId>com.hazelcast</groupId>
-          <artifactId>hazelcast-all</artifactId>
-          <version>3.8.6</version>
-      </dependency>
+    <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast-all</artifactId>
+      <version>3.8.6</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-csv</artifactId>
