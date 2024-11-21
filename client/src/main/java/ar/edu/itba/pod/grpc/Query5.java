@@ -47,6 +47,11 @@ public class Query5 extends Query{
           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
           LocalDateTime localDateTime = LocalDateTime.parse(issueDate, formatter);
 
+          LocalDate date = localDateTime.toLocalDate();
+          if (date.isBefore(arguments.getFrom()) || date.isAfter(arguments.getTo())) {
+            return;
+          }
+
           int year = localDateTime.getYear();
           int month = localDateTime.getMonthValue();
           int day = localDateTime.getDayOfMonth();
