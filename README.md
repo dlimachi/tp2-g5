@@ -34,7 +34,7 @@ Si se encuentra en otro servidor:
 ```bash
 scp [usuarioPampero]@pampero.itba.edu.ar:/afs/it.itba.edu.ar/pub/pod/agenciesNYC.csv .
 scp [usuarioPampero]@pampero.itba.edu.ar:/afs/it.itba.edu.ar/pub/pod/infractionsNYC.csv .
-scp [usuarioPampero]@pampero.itba.edu.ar:/afs/it.itba.edu.ar/pub/pod/ticketsNYC.csv .
+scp dlimachi@pampero.itba.edu.ar:/afs/it.itba.edu.ar/pub/pod/ticketsNYC.csv .
 ```
 
 ## Ejecución del Servidor
@@ -58,6 +58,7 @@ sh client/src/main/assembly/overlay/queryX.sh #[opciones]
 * **-DoutPath** = Path a la carpeta donde se guardarán los archivos de salida queryN.csv y timeN.txt.
 * **-Dcity** = Ciudad de la que se quieren obtener los datos.
 * **-Dn** = Límite para la query 3 y 4.
-* **-Dagency** = Agencia seleccionada para la query 4.
-* **-Dfrom** = Fecha de inicio para la query 5.
-* **-Dto** = Fecha de fin para la query 5.
+* **-Dagency** = Agencia seleccionada para la query 4. [pe: DEPARTMENT_OF_TRANSPORTATION]
+* **-Dfrom** = Fecha de inicio para la query 5. [pe: '03/12/2013']
+* **-Dto** = Fecha de fin para la query 5. [pe: '03/12/2013']
+
